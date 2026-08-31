@@ -48,7 +48,7 @@ async function sign(secret: string, payload: string) {
 
 type SignedResponse<T> = { retCode: number; retMsg: string; result: T };
 
-async function request<T>(
+export async function request<T>(
   credentials: BybitCredentials,
   method: "GET" | "POST",
   path: string,
