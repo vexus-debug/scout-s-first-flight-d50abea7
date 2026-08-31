@@ -1,0 +1,3 @@
+- [ ] Add authenticated, guarded Bybit spot execution for scanner opportunities.
+- [ ] Show sequential leg progress and persist execution audit history.
+- [ ] Validate build and preview behavior without placing a real order.
