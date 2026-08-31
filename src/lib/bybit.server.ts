@@ -80,9 +80,17 @@ export async function request<T>(
   const json = (await response.json()) as SignedResponse<T>;
   if (!response.ok || json.retCode !== 0) {
     // Bybit's message is safe to surface; it never contains key material.
-    throw new Error(json.retMsg || `Bybit request failed (${response.status})`);
+    throw new BybitError(json.retMsg || `Bybit request failed (${response.status})`, json.retCode, response.status);
   }
   return json.result;
+}
+
+/** Carries Bybit's retCode so callers can decide whether a retry is safe. */
+export class BybitError extends Error {
+  constructor(message: string, readonly retCode: number, readonly httpStatus: number) {
+    super(message);
+    this.name = "BybitError";
+  }
 }
 
 export async function fetchSpotFeeRates(credentials: BybitCredentials) {
