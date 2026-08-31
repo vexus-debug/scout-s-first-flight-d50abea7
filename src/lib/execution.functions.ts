@@ -141,7 +141,8 @@ const toRunState = (
     })),
 });
 
-type Supa = { supabase: Awaited<ReturnType<typeof import("@/integrations/supabase/auth-middleware")["requireSupabaseAuth"]>> };
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 async function loadRun(supabase: any, runId: string): Promise<RunState | null> {
   const [{ data: run }, { data: legs }] = await Promise.all([
