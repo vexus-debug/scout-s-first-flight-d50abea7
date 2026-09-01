@@ -688,6 +688,7 @@ function Scanner() {
         feeRates={scanRequest?.feeRates ?? feeRates}
         convertSpread={scanRequest?.convertSpread ?? convertSpread}
         fetchedAt={scanRequest?.market.fetchedAt ?? market?.fetchedAt}
+        mode={accountMode === "demo" ? "demo" : "live"}
         onClose={() => setSelected(null)}
       />
     </main>
