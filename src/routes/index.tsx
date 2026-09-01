@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDown, ArrowUp, ChevronDown, CircleHelp, Clock3, ExternalLink, Gauge, GitBranch, Info, LayoutGrid, RefreshCw, Search, Settings2, SlidersHorizontal, Star, WalletCards, Zap } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ExecutionPanel } from "@/components/ExecutionPanel";
 import { getBybitConvertQuote, getBybitFeeRates } from "@/lib/bybit.functions";
 
 type Instrument = {
@@ -688,6 +689,7 @@ function Scanner() {
         feeRates={scanRequest?.feeRates ?? feeRates}
         convertSpread={scanRequest?.convertSpread ?? convertSpread}
         fetchedAt={scanRequest?.market.fetchedAt ?? market?.fetchedAt}
+        mode={accountMode === "demo" ? "demo" : "live"}
         onClose={() => setSelected(null)}
       />
     </main>
@@ -718,7 +720,7 @@ function formatUsd(value: number) {
 }
 
 /** Detailed per-leg walkthrough of one route, simulated with a $1 notional. */
-function RouteDetail({ opportunity, fee, feeRates, convertSpread, fetchedAt, onClose }: { opportunity: Opportunity | null; fee: number; feeRates: Record<string, number>; convertSpread: number; fetchedAt?: string | undefined; onClose: () => void }) {
+function RouteDetail({ opportunity, fee, feeRates, convertSpread, fetchedAt, mode, onClose }: { opportunity: Opportunity | null; fee: number; feeRates: Record<string, number>; convertSpread: number; fetchedAt?: string | undefined; mode: "live" | "demo"; onClose: () => void }) {
   if (!opportunity) return null;
   const start = opportunity.assets[0] ?? "";
 
@@ -809,6 +811,8 @@ function RouteDetail({ opportunity, fee, feeRates, convertSpread, fetchedAt, onC
             <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>Modelled at top-of-book with no slippage. A $1 notional is below Bybit minimum order sizes — this is a ratio simulation, not an executable ticket. Route liquidity is capped by its thinnest leg (${(opportunity.volume / 1_000_000).toFixed(2)}m 24h turnover){convertLegs > 0 ? ", and Convert quotes are modelled from the USD reference mid rather than a live quote" : ""}.</span>
           </div>
+
+          <ExecutionPanel startCoin={start} legs={opportunity.legs} netEdge={opportunity.net} mode={mode} />
         </div>
       </div>
     </div>
